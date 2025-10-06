@@ -4,6 +4,10 @@
     <title>Layered Cake & Candle</title>
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
 
+
+    <!-- Confetti library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
     <style> 
         body {
             background-color: rgb(255, 187, 145);
@@ -107,6 +111,23 @@
         let blownOut = false;
         const flame = document.getElementById('flame');
 
+        // Confetti burst
+        function launchConfetti() {
+          const duration = 3 * 1000;
+          const end = Date.now() + duration;
+
+          (function frame() {
+            confetti({
+              particleCount: 7,
+              startVelocity: 30,
+              spread: 360,
+              ticks: 60,
+              origin: { x: Math.random(), y: Math.random() - 0.2 }
+            });
+            if (Date.now() < end) requestAnimationFrame(frame);
+          })();
+        }
+
         function detectBlow() {
           analyser.getByteTimeDomainData(dataArray);
           const volume = dataArray.reduce((sum, val) => sum + Math.abs(val - 128), 0) / dataArray.length;
@@ -114,6 +135,7 @@
           if (volume > 15 && !blownOut) {
             flame.style.opacity = 0;
             blownOut = true;
+            launchConfetti();
           }
           requestAnimationFrame(detectBlow);
         }
