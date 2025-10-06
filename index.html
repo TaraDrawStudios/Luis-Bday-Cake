@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Layered Cake & Candle</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
+    <style> 
+        body {
+            background-color: rgb(255, 187, 145);
+            background-image: url("https://wallpapers.com/images/high/kamen-rider-dual-heroes-artwork-9i0qzqw85h1hvb0j.webp");
+            background-size: cover;
+            background-position: center;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Top widget bar */
+        .top-widget {
+            position: relative;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+
+        .cursive {
+            font-family: 'Great Vibes', cursive;
+            margin: 0;
+        }
+
+        .top-widget p {
+            margin: 5px 0;
+        }
+
+        /* Cake wrapper sits below the top widget */
+        .cake-wrapper {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            margin-top: auto;   /* pushes cake lower */
+            margin-bottom: 20px;
+        }
+
+        .cake {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://static.vecteezy.com/system/resources/previews/054/125/640/non_2x/blue-birthday-cake-transparent-background-png.png') no-repeat center;
+            background-size: contain;
+        }
+
+        .candle-img {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            max-height: 100px;
+        }
+
+        .flame-img {
+            position: absolute;
+            top: -170px;
+            left: 50%;
+            transform: translateX(-50%);
+            max-height: 200px;
+            mix-blend-mode: screen;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top widget always above -->
+    <div class="top-widget">
+        <h2 class="cursive">Luis Garbanzos ~ Silly Raccoon</h2>
+        <p>This is for being the best boyfriend in my life. 
+            Thank you for bringing a lot of joy and helping me spread my wings. 
+            You've helped me grow a lot for such a short amount of time and nothing
+             can express for how much I love you. Instead I give you cake. Happy Birthday! Now blow it down -pause-</p>
+        <h2 class = "cursive">~Taratong Dolinsky :3</p>
+       
+    </div>
+
+    <!-- Cake + candle below -->
+    <div class="cake-wrapper">
+        <span class="cake"></span>
+        <img class="candle-img" src="https://drive.google.com/thumbnail?id=17EBeHr4F4wveLfC1O4p6aicYNPLtG7cQ&sz=w200" alt="Candle">
+        <img id="flame" class="flame-img" src="https://i.gifer.com/9PrD.gif" alt="Flame">
+    </div>
+
+    <script>
+    navigator.mediaDevices.getUserMedia({ audio: true })
+      .then(stream => {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const mic = audioContext.createMediaStreamSource(stream);
+        const analyser = audioContext.createAnalyser();
+        analyser.fftSize = 256;
+
+        const dataArray = new Uint8Array(analyser.fftSize);
+        mic.connect(analyser);
+
+        let blownOut = false;
+        const flame = document.getElementById('flame');
+
+        function detectBlow() {
+          analyser.getByteTimeDomainData(dataArray);
+          const volume = dataArray.reduce((sum, val) => sum + Math.abs(val - 128), 0) / dataArray.length;
+
+          if (volume > 15 && !blownOut) {
+            flame.style.opacity = 0;
+            blownOut = true;
+          }
+          requestAnimationFrame(detectBlow);
+        }
+        detectBlow();
+      })
+      .catch(error => {
+        alert('You did not allow mic :( You cannot blow out candle without mic');
+        console.error(error);
+      });
+    </script>
+</body>
+</html>
