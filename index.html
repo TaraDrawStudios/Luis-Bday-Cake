@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Layered Cake & Candle</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />    <title>Layered Cake & Candle</title>
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
 
 
@@ -20,7 +21,6 @@
             flex-direction: column;
             align-items: center;
         }
-
         /* Top widget bar */
         .top-widget {
             position: relative;
@@ -75,6 +75,27 @@
             mix-blend-mode: screen;
             transition: opacity 0.5s ease;
             pointer-events: none;
+        }
+        /* Responsive font scaling */
+        @media (min-width: 768px) {
+          body {
+            font-size: 18px;
+          }
+          .top-widget h2 {
+            font-size: 2rem;
+          }
+        }
+
+        @media (min-width: 1024px) {
+          body {
+            font-size: 20px;
+          }
+          .top-widget {
+            padding: 25px 40px;
+          }
+          .cake-wrapper {
+            max-width: 350px;
+          }
         }
     </style>
 </head>
